@@ -625,11 +625,15 @@ function Show-AnyBox
                     [string]$onClick = $null # "`$_.Source.Foreground = 'Navy'; "
                     if ($prmpt.DefaultValue)
                     {
-                        $onClick = "`$form.Result[`$_.Source.Name] = `$true; start '$($prmpt.DefaultValue)'"
+                        # Escape single quotes to prevent command injection
+                        $escapedValue = $prmpt.DefaultValue.Replace("'", "''")
+                        $onClick = "`$form.Result[`$_.Source.Name] = `$true; start '$escapedValue'"
                     }
                     else
                     {
-                        $onClick = "`$form.Result[`$_.Source.Name] = `$true; start '$($prmpt.Message)'"
+                        # Escape single quotes to prevent command injection
+                        $escapedMessage = $prmpt.Message.Replace("'", "''")
+                        $onClick = "`$form.Result[`$_.Source.Name] = `$true; start '$escapedMessage'"
                     }
                     $inBox.add_MouseLeftButtonDown([scriptblock]::Create($onClick))
                 }
